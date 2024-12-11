@@ -1,4 +1,6 @@
 const Chat = require("../models/Chat");
+const User = require("../models/User");
+const Company = require("../models/Company");
 const sendMessage = async (req,res,io)=>{
     try {
 
@@ -10,14 +12,26 @@ const sendMessage = async (req,res,io)=>{
         roomID: req.body.roomID,
       });
       await chat.save();
+      const fullName = await User.findById(req.body.userID).select("fullname");
+      const companyName = await Company.findById(req.body.companyID).select("companyName");
       if (io) {
-        io.to(req.body.roomID).emit('receiveMessage', {
+        // io.to(req.body.roomID).emit('receiveMessage', {
+        //   senderType: chat.senderType,
+        //   userID: chat.userID,
+        //   companyID: chat.companyID,
+        //   content: chat.content,
+        //   roomID: chat.roomID,
+        //   createdAt: chat.createdAt,
+        // });
+        io.emit('receiveMessage', {
           senderType: chat.senderType,
           userID: chat.userID,
           companyID: chat.companyID,
           content: chat.content,
           roomID: chat.roomID,
           createdAt: chat.createdAt,
+          user: fullName,
+          company: companyName,
         });
       }
       //res.redirect(`/chat/${req.body.roomID}`);

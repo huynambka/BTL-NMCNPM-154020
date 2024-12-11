@@ -151,6 +151,7 @@
     const companyID = "<%=  (messages[0]?.companyID._id || '')  %>";
     const fullname = "<%=  (messages[0]?.userID.fullname || '')  %>";
     const companyName = "<%=  (messages[0]?.companyID.companyName || '')  %>";
+
     // Khởi tạo socket
     const socket = io();
 
@@ -159,6 +160,7 @@
 
     // Xử lý sự kiện nhận tin nhắn
     socket.on('receiveMessage', (message) => {
+      if (message.roomID !== roomID) return;
       const chatMessages = document.getElementById('chat-messages');
       // Tạo element tin nhắn mới
       const messageElement = document.createElement('div');
@@ -177,8 +179,13 @@
         </div>
       `;
 
+      const isScrolledToBottom = chatMessages.scrollTop + chatMessages.clientHeight >= chatMessages.scrollHeight - 10;
       chatMessages.appendChild(messageElement);
-      chatMessages.scrollTop = chatMessages.scrollHeight; // Tự động cuộn xuống cuối
+      if (isScrolledToBottom) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      
+      
     });
 
     // Gửi tin nhắn qua Socket.IO
@@ -201,6 +208,7 @@
       document.getElementById('message-input').value = '';
     });
     
+  
   </script>
 </div>
 

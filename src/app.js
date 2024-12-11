@@ -51,10 +51,6 @@ const io = new Server(server);
 global._io = io;
 initializeSocket(io);
 
-
-
-
-
 // Routes
 app.use("/auth", router.authRoutes);
 app.use("/user", router.userRoutes);

@@ -36,6 +36,8 @@ function initializeSocket(io) {
         console.error(`Error sending message: ${error.message}`);
       }
     });
+    
+    
 
     // Sự kiện ngắt kết nối
     socket.on('disconnect', () => {

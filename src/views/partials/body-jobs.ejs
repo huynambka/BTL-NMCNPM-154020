@@ -112,7 +112,11 @@
                                         </a>
                                     </div>
                                     <div class="company-card-body">
-                                        <p><%= company.description %></p>
+                                        <p>
+                                            <% if (company.description.length > 240) { %> <%=
+                                            company.description.substring(0, 240) %> ... <% } else { %> <%=
+                                            company.description %> <% } %>
+                                        </p>
                                         <% for (let i = 0; i < companies.jobNames; i++) { %>
                                         <span class="keyword-button"><%= companies.jobNames[i] %></span>
                                         <% } %>
@@ -163,7 +167,11 @@
                                 <div class="job-card" style="min-height: 300px">
                                     <div class="d-flex align-items-center mb-3">
                                         <a href="/job/<%= job.id %>" class="link d-flex align-items-center mb-3">
-                                            <img src="<%= job.logo || '/images/default_logo.png' %>" alt="Job Logo" class="job-logo me-3" />
+                                            <img
+                                                src="<%= job.logo || '/images/default_logo.png' %>"
+                                                alt="Job Logo"
+                                                class="job-logo me-3"
+                                            />
                                             <h5 class="job-card-title mb-0"><%= job.title %></h5>
                                         </a>
                                     </div>

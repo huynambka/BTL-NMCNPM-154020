@@ -63,17 +63,23 @@ const profile = async (req, res) => {
 //[GET] /comapny/:id/company_page
 const companyDetail = async (req, res) => {
     const id = req.params.id;
-    var user = 0;
-    if(req.user){
-        user = req.user._id;
-    }
     try {
-        const company = await Company.findById(id).populate("jobs");
+        const company1 = await Company.findById(id).populate("jobs");
 
-        res.render("company/layout/company_view", {
-            company: company,
-            user : user
-        });
+        const user = await User.findById(req.user._id).select("-password");
+        const loggedInCompanyId = req.company?._id;
+
+        if (id == loggedInCompanyId) {
+            res.render("company/layout/mainpage", {
+                company: company1,
+            });
+        }
+        else {
+            res.render("company/layout/company_view", {
+                company: company1, user
+            });
+        }
+
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
@@ -273,7 +279,7 @@ const updateCompany = async (req, res) => {
         res.redirect("/company/profile");
     } catch (error) {
         console.log(error);
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ success: false, message: error.message });
     }
 };
 //[GET] /company/edit

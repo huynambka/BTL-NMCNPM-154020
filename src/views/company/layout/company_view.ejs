@@ -1,75 +1,75 @@
-    <!DOCTYPE html>
-    <html lang="en">
-        <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title><%= company.companyName %> - Company Profile</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-            <style>
-                /* Styling for the Company Banner */
-                .company-banner {
-                    background-color: #f10f0f;
-                    padding: 20px;
-                    border-radius: 8px;
-                    margin-bottom: 20px;
-                    display: flex;
-                    align-items: center;
-                }
-                .company-banner .logo-circle {
-                    width: 100px;
-                    height: 100px;
-                    object-fit: cover;
-                    border-radius: 50%;
-                    margin-right: 20px;
-                }
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= company.companyName %> - Company Profile</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        <style>
+            /* Styling for the Company Banner */
+            .company-banner {
+                background-color: #d9eafd;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+            }
+            .company-banner .logo-circle {
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                border-radius: 50%;
+                margin-right: 20px;
+            }
 
-                /* Styling for Company Info and Contact Info sections */
-                .company-info,
-                .contact-info {
-                    background-color: #e9ecef;
-                    border-radius: 8px;
-                    padding: 20px;
-                    margin-bottom: 20px;
-                }
+            /* Styling for Company Info and Contact Info sections */
+            .company-info,
+            .contact-info {
+                background-color: #bcccdc;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
 
-                .job-item {
-                    background-color: #ffffff;
-                    border: 1px solid #e0e0e0;
-                    border-radius: 10px;
-                    padding: 15px;
-                    margin-bottom: 15px;
-                    display: flex;
-                    flex-direction: column;
-                }
+            .job-item {
+                background-color: #ffffff;
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+                padding: 15px;
+                margin-bottom: 15px;
+                display: flex;
+                flex-direction: column;
+            }
 
-                .job-logo {
-                    width: 60px;
-                    height: 60px;
-                    object-fit: cover;
-                    border-radius: 50%;
-                    margin-right: 15px;
-                }
+            .job-logo {
+                width: 60px;
+                height: 60px;
+                object-fit: cover;
+                border-radius: 50%;
+                margin-right: 15px;
+            }
 
-                .job-info {
-                    flex-grow: 1;
-                    margin-left: 10px;
-                }
+            .job-info {
+                flex-grow: 1;
+                margin-left: 10px;
+            }
 
-                .job-actions {
-                    display: flex;
-                    flex-wrap: nowrap;
-                    justify-content: flex-start;
-                    gap: 10px;
-                }
+            .job-actions {
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                gap: 10px;
+            }
 
-                .job-actions .btn {
-                    min-width: 100px;
-                }
+            .job-actions .btn {
+                min-width: 100px;
+            }
 
-                .job-actions .btn:hover {
-                    opacity: 0.9;
-                }
+            .job-actions .btn:hover {
+                opacity: 0.9;
+            }
 
             .iframe {
                 border-radius: 12px;
@@ -83,59 +83,67 @@
         <div class="container mt-5">
             <!-- Company Banner -->
             <div class="company-banner" data-aos="fade-up">
-                <img src="<%= company.logoPath || '/images/default_logo.png' %>" alt="Company Logo" class="logo-circle" />
+                <img
+                    src="<%= company.logoPath || '/images/default_logo.png' %>"
+                    alt="Company Logo"
+                    class="logo-circle"
+                />
                 <div>
                     <h3 class="mb-2"><%= company.companyName %></h3>
                     <a href="<%= company.website %>" class="btn btn-light btn-sm">
                         <i class="fa fa-globe"></i> Xem website công ty
                     </a>
-                    
+
                     <% if (user) { %>
-                        <button class="btn btn-light btn-sm" onclick="chat('<%=company._id%>')">
-                            <i class="fa fa-comment"></i> Liên hệ công ty
-                        </button>
-                        <% } %>
+                    <button class="btn btn-light btn-sm" onclick="chat('<%=company._id%>')">
+                        <i class="fa fa-comment"></i> Liên hệ công ty
+                    </button>
+                    <% } %>
                 </div>
             </div>
 
-                <div class="row">
-                    <!-- Company Information -->
-                    <div class="col-md-8">
-                        <div class="company-info" data-aos="fade-up">
-                            <h5>Thông tin chung</h5>
-                            <p><%= company.description %></p>
-                        </div>
+            <div class="row">
+                <!-- Company Information -->
+                <div class="col-md-8">
+                    <div class="company-info" data-aos="fade-up">
+                        <h5>Thông tin chung</h5>
+                        <p><%= company.description %></p>
+                    </div>
 
-                        <!-- Job Listings -->
-                        <div class="d-flex justify-content-between align-items-center mb-3" data-aos="fade-up">
-                            <h5>Vị trí tuyển dụng</h5>
-                        </div>
+                    <!-- Job Listings -->
+                    <div class="d-flex justify-content-between align-items-center mb-3" data-aos="fade-up">
+                        <h5>Vị trí tuyển dụng</h5>
+                    </div>
 
-                        <div class="list-group" data-aos="fade-up">
-                            <% company.jobs.forEach(function(job) { %>
-                            <div class="job-item">
-                                <% let lastDate = new Date(job.deadline); // Chuyển chuỗi thành đối tượng Date let
-                                formattedDate = `${lastDate.getDate().toString().padStart(2, '0')}/${(lastDate.getMonth() +
-                                1).toString().padStart(2, '0')}/${lastDate.getFullYear()}`; %>
-                                <div class="d-flex align-items-center mb-3">
-                                    <img src="<%= company.logoPath || '/images/default_logo.png' %>" alt="Company Logo" class="job-logo" />
-                                    <div class="job-info">
-                                        <h6><%= job.title %></h6>
-                                        <p class="text-muted mb-1"><strong>Lương:</strong> <%= job.salary %></p>
-                                        <p class="text-muted mb-1"><strong>Địa điểm:</strong> <%= job.location %></p>
-                                        <p class="text-muted mb-1"><strong>Hạn ứng tuyển:</strong> <%= formattedDate %></p>
-                                    </div>
+                    <div class="list-group" data-aos="fade-up">
+                        <% company.jobs.forEach(function(job) { %>
+                        <div class="job-item">
+                            <% let lastDate = new Date(job.deadline); // Chuyển chuỗi thành đối tượng Date let
+                            formattedDate = `${lastDate.getDate().toString().padStart(2, '0')}/${(lastDate.getMonth() +
+                            1).toString().padStart(2, '0')}/${lastDate.getFullYear()}`; %>
+                            <div class="d-flex align-items-center mb-3">
+                                <img
+                                    src="<%= company.logoPath || '/images/default_logo.png' %>"
+                                    alt="Company Logo"
+                                    class="job-logo"
+                                />
+                                <div class="job-info">
+                                    <h6><%= job.title %></h6>
+                                    <p class="text-muted mb-1"><strong>Lương:</strong> <%= job.salary %></p>
+                                    <p class="text-muted mb-1"><strong>Địa điểm:</strong> <%= job.location %></p>
+                                    <p class="text-muted mb-1"><strong>Hạn ứng tuyển:</strong> <%= formattedDate %></p>
                                 </div>
+                            </div>
 
                             <div class="d-flex job-actions">
                                 <!-- <a href="/user/apply/<%= job._id %>" class="btn btn-outline-primary btn-sm">
                                 <i class="fa fa-paper-plane"></i> Ứng tuyển
                             </a> -->
-                            <% if (user) { %>
+                                <!-- <% if (user) { %>
                                 <button class="btn btn-outline-primary btn-sm" onclick="apply('<%=job._id%>')">
                                     <i class="fa fa-paper-plane"></i> Ứng tuyển
                                 </button>
-                                <% } %>
+                                <% } %> -->
                                 <a href="/job/<%= job._id %>" class="btn btn-outline-secondary btn-sm">
                                     <i class="fa fa-eye"></i> Xem
                                 </a>
@@ -157,132 +165,130 @@
                         <p><strong>Email:</strong> <%= company.email %></p>
                     </div>
 
-                        <!-- Map -->
-                        <div class="contact-info" data-aos="fade-up">
-                            <h5>Địa điểm</h5>
-                            <iframe
-                                src="https://www.google.com/maps?q=<%= encodeURIComponent(company.address.detail + ', ' + company.address.district + ', ' + company.address.province) %>&output=embed"
-                                width="100%"
-                                height="250"
-                                allowfullscreen=""
-                                loading="lazy"
-                            ></iframe>
-                        </div>
+                    <!-- Map -->
+                    <div class="contact-info" data-aos="fade-up">
+                        <h5>Địa điểm</h5>
+                        <iframe
+                            src="https://www.google.com/maps?q=<%= encodeURIComponent(company.address.detail + ', ' + company.address.district + ', ' + company.address.province) %>&output=embed"
+                            width="100%"
+                            height="250"
+                            allowfullscreen=""
+                            loading="lazy"
+                        ></iframe>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- JS Libraries -->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+        <!-- JS Libraries -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
-            <script>
-                AOS.init();
-            </script>
-            <script>
-                
-                function chat(id){
-                    fetch('/chat/createRoom',{
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({id})
-                    })
-                    .then(response => response.json())
-                    .then(data =>{
-                        if(data.success){
-                            window.location.href = `/chat/${data.roomID}`
+        <script>
+            AOS.init();
+        </script>
+        <script>
+            function chat(id) {
+                fetch("/chat/createRoom", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            window.location.href = `/chat/${data.roomID}`;
+                        } else {
+                            alert(data.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
                         }
-                        else{
-                            alert(data.message || 'Đã xảy ra lỗi. Vui lòng thử lại.')
-                        }
-                    })
-                }
-            </script>
-            <!-- JavaScript for Applying to Job -->
-            <script>
-                document.getElementById("fileUpload").addEventListener("change", function () {
-                    const file = this.files[0];
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert("File size must be less than 5MB");
-                        this.value = "";
-                    }
-                    document.getElementById("cv").value = file.name;
-                    document.getElementById("cv").disabled = true;
-                });
-                async function applyToJob(jobId) {
-                    const name = document.getElementById("name").value;
-                    const phoneNumber = document.getElementById("phone").value;
-                    const email = document.getElementById("email").value;
-                    const cvTitle = document.getElementById("cv").value;
-                    const coverLetter = document.getElementById("coverLetter").value;
-                    const file = document.getElementById("fileUpload").files[0];
-                    let isFileUploaded = false;
-                    let fileUpload = {};
-
-                    if (!name || !phoneNumber || !email) {
-                        alert("Please fill in all fields");
-                        return;
-                    }
-                    if (!cvTitle && !file) {
-                        alert("Please select a CV file or upload a new one");
-                        return;
-                    }
-
-                    if (file) {
-                        isFileUploaded = true;
-                        fileUpload = {
-                            name: file.name,
-                            type: file.type,
-                            size: file.size,
-                            data: await convertFileToBase64(file),
-                        };
-                    }
-
-                    fetch(`/job/${jobId}/apply`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            name,
-                            phoneNumber,
-                            email,
-                            cvTitle,
-                            coverLetter,
-                            isFileUploaded,
-                            fileUpload,
-                        }),
-                    })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.success) {
-                                const messageDiv = document.getElementById("applyMessage");
-                                messageDiv.style.display = "block";
-
-                                // Hide the message after 3 seconds
-                                setTimeout(() => {
-                                    messageDiv.style.display = "none";
-                                }, 3000);
-                            } else {
-                                alert(data.message);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error:", error);
-                            alert("An error occurred. Please try again.");
-                        });
-                }
-                function convertFileToBase64(file) {
-                    return new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result.split(",")[1]); // Loại bỏ tiền tố Base64
-                        reader.onerror = (error) => reject(error);
-                        reader.readAsDataURL(file);
                     });
+            }
+        </script>
+        <!-- JavaScript for Applying to Job -->
+        <script>
+            document.getElementById("fileUpload").addEventListener("change", function () {
+                const file = this.files[0];
+                if (file.size > 5 * 1024 * 1024) {
+                    alert("File size must be less than 5MB");
+                    this.value = "";
                 }
-            </script>
-            <%- include('../../partials/footer') %>
-        </body>
-    </html>
+                document.getElementById("cv").value = file.name;
+                document.getElementById("cv").disabled = true;
+            });
+            async function applyToJob(jobId) {
+                const name = document.getElementById("name").value;
+                const phoneNumber = document.getElementById("phone").value;
+                const email = document.getElementById("email").value;
+                const cvTitle = document.getElementById("cv").value;
+                const coverLetter = document.getElementById("coverLetter").value;
+                const file = document.getElementById("fileUpload").files[0];
+                let isFileUploaded = false;
+                let fileUpload = {};
+
+                if (!name || !phoneNumber || !email) {
+                    alert("Please fill in all fields");
+                    return;
+                }
+                if (!cvTitle && !file) {
+                    alert("Please select a CV file or upload a new one");
+                    return;
+                }
+
+                if (file) {
+                    isFileUploaded = true;
+                    fileUpload = {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        data: await convertFileToBase64(file),
+                    };
+                }
+
+                fetch(`/job/${jobId}/apply`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name,
+                        phoneNumber,
+                        email,
+                        cvTitle,
+                        coverLetter,
+                        isFileUploaded,
+                        fileUpload,
+                    }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            const messageDiv = document.getElementById("applyMessage");
+                            messageDiv.style.display = "block";
+
+                            // Hide the message after 3 seconds
+                            setTimeout(() => {
+                                messageDiv.style.display = "none";
+                            }, 3000);
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        alert("An error occurred. Please try again.");
+                    });
+            }
+            function convertFileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(",")[1]); // Loại bỏ tiền tố Base64
+                    reader.onerror = (error) => reject(error);
+                    reader.readAsDataURL(file);
+                });
+            }
+        </script>
+        <%- include('../../partials/footer') %>
+    </body>
+</html>

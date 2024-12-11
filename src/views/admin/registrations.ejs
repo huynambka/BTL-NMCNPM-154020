@@ -41,52 +41,117 @@
                 </tbody>
             </table>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.19/dist/sweetalert2.min.js"></script>
         <script>
-            const handleDelete = (id) => {                
-                agree = confirm("Are you sure you want to delete this registration?");
-                if (agree) {
-                    fetch("/admin/registrations/delete", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ id }),
-                    })
-                        .then((response) => {
-                            return response.json();
-                        })
-                        .then((data) => {
-                            if (data.success) {
-                                alert("Registration deleted successfully");
-                                window.location.reload();
-                            } else {
-                                alert("Failed to delete registration");
+            const handleDelete = (id) => {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true, // Hiển thị nút Cancel
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true // Đảo ngược vị trí của các nút
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.close(); // Đóng popup
+                        Swal.fire({
+                            title: 'Đang xóa...',
+                            html: 'Vui lòng đợi trong giây lát...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
                             }
                         });
-                }
+                        fetch("/admin/registrations/delete", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ id }),
+                        }).then((response) => {
+                                return response.json();
+                            })
+                            .then((data) => {
+                                Swal.close();
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Thành công!",
+                                        text: "Xóa thành công đơn đăng ký!",
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    }).then(() => {
+                                        window.location.href = "/admin/registrations"; 
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Lỗi",
+                                        text: "Xóa thất bại. Vui lòng thử lại!",
+                                        showConfirmButton: true,
+                                    });
+                                }
+                            });
+                    } else if (result.isDenied) {
+                      Swal.fire('Changes are not saved', '', 'info')
+                    }
+                  });              
             };
             const handleDone = (id) => {
-                agree = confirm("Are you sure you want to approve this registration?");
-                if (agree) {
-                    fetch("/admin/registrations/done", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ id }),
-                    })
-                        .then((response) => {
-                            return response.json();
-                        })
-                        .then((data) => {
-                            if (data.success) {
-                                alert("Registration approved successfully");
-                                window.location.reload();
-                            } else {
-                                alert("Failed to approve registration");
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true, // Hiển thị nút Cancel
+                    confirmButtonText: 'Yes, approve it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true // Đảo ngược vị trí của các nút
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.close(); // Đóng popup
+                        Swal.fire({
+                            title: 'Đang xóa...',
+                            html: 'Vui lòng đợi trong giây lát...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
                             }
                         });
-                }
+                        fetch("/admin/registrations/done", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ id }),
+                        }).then((response) => {
+                                return response.json();
+                            })
+                            .then((data) => {
+                                Swal.close();
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Thành công!",
+                                        text: "Phê duyệt thành công công ty!",
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    }).then(() => {
+                                        window.location.href = "/admin/registrations"; 
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Lỗi",
+                                        text: "Phê duyệt thất bại. Vui lòng thử lại!",
+                                        showConfirmButton: true,
+                                    });
+                                }
+                            });
+                    } else if (result.isDenied) {
+                      Swal.fire('Changes are not saved', '', 'info')
+                    }
+                  });
             };
         </script>
     </body>

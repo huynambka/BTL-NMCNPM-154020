@@ -59,7 +59,7 @@ const showJob = async (req, res) => {
         console.log("Token là của công ty:", isCompany);
         console.log("Token là của người dùng:", isUser);
 
-        const loggedInCompanyId = req.company?._id; 
+        const loggedInCompanyId = req.company?._id;
         const companyFromJobId = job.companyId?._id;
 
         if (isCompany && loggedInCompanyId?.toString() === companyFromJobId?.toString()) {
@@ -68,7 +68,8 @@ const showJob = async (req, res) => {
 
         if (isUser) {
             const user = await User.findById(req.user._id).select("-password");
-            return res.render("job/show-job-user.ejs", { job, user });
+            const isApplied = user.jobs.includes(jobId);
+            return res.render("job/show-job-user.ejs", { job, user, isApplied });
         }
 
         // Trường hợp không hợp lệ

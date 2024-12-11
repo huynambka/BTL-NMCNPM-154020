@@ -385,6 +385,64 @@ const showJob = async (req, res) => {
     }
 };
 
+const changePassword = async (req, res) => {
+    try {
+        if (!req.company || !req.company._id) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
+
+        const company = await Company.findById(req.company._id);
+
+        if (!company) {
+            return res.status(404).json({
+                success: false,
+                message: "Company not found",
+            });
+        }
+
+        res.render("company/layout/companyChangePassword", { company });
+    } catch (error) {
+        console.error("Error in changePassword:", error);
+        res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+};
+
+
+
+
+const updatedPassword = async (req, res) => {
+    try {
+        const { oldPassword, newPassword, confirmPassword } = req.body;
+
+        const company = await Company.findById(req.company._id);
+
+        if (!company) {
+            return res.status(404).json({ success: false, message: "Công ty không tồn tại" });
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, company.password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, message: "Mật khẩu cũ không đúng" });
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ success: false, message: "Mật khẩu xác nhận không khớp" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        company.password = hashedPassword;
+        await company.save();
+
+        res.status(200).json({ success: true, message: "Thay đổi mật khẩu thành công" });
+    } catch (error) {
+        console.error("Error in updatedPassword:", error);
+        res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+    }
+};
+
 module.exports = {
     getCompanyInfo,
     register,
@@ -400,4 +458,6 @@ module.exports = {
     postEditJob,
     showJob,
     viewCV,
+    changePassword,
+    updatedPassword
 };

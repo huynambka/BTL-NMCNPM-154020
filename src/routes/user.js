@@ -40,4 +40,7 @@ router.get("/applied-jobs", passportJWT, userController.getAppliedJobs);
 router.get("/update", passportJWT, userController.createInfo);
 router.post("/updated", passportJWT, uploadAvatar.single("avatar"), uploadAvatarErrorHandler, userController.createdInfo);
 
+//Route đổi mật khẩu người dùng 
+router.get("/change-password", passportJWT, userController.changePassword);
+router.post("/change-password", passportJWT, userController.updatedPassword);
 module.exports = router;

@@ -373,6 +373,60 @@ const getUserProfileForCompany = async (req, res) => {
     }
 };
 
+const changePassword = async(req, res) => {
+    try {
+        const userId = req.user._id;
+
+        if (!userId) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({ success: false, message: "User ID is not provided" });
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({ success: false, message: "User not found" });
+        }
+        res.render("userChangePassword", { user });
+
+    }
+    catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: "Error updating user information",
+            error: error.message,
+        });
+    }
+};
+
+const updatedPassword = async (req, res) => {
+    try {
+        const { oldPassword, newPassword, confirmPassword } = req.body;
+
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Người dùng không tồn tại" });
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, message: "Mật khẩu cũ không đúng" });
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ success: false, message: "Mật khẩu xác nhận không khớp" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ success: true, message: "Thay đổi mật khẩu thành công" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+    }
+};
+
+
 module.exports = {
     getUpdate,
     getUploadCV,
@@ -387,4 +441,6 @@ module.exports = {
     createdInfo,
     applyJob,
     getAppliedJobs,
+    changePassword,
+    updatedPassword,
 };

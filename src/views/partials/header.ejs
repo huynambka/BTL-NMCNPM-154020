@@ -60,9 +60,88 @@
             .btn-update:hover {
                 background-color: #218838;
             }
+            #notification-container {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                width: 300px;
+                z-index: 9999;
+            }
+            
+            .notification {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background-color: #fff;
+                color: #333;
+                padding: 15px 20px;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                border-left: 5px solid #007bff;
+                transition: all 0.4s ease-in-out;
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            
+            .notification.show {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            
+            .notification.hide {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            
+            .notification img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+            
+            .notification .content {
+                flex-grow: 1;
+            }
+            
+            .notification .content strong {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            
+            .alert-user {
+                border-left-color: #17a2b8;
+            }
+            
+            .alert-company {
+                border-left-color: #28a745;
+            }
+            
+            .alert-info {
+                background-color: #d1ecf1;
+                color: #0c5460;
+            }
+            
+            .alert-warning {
+                background-color: #fff3cd;
+                color: #856404;
+            }
+            
+            .alert-error {
+                background-color: #f8d7da;
+                color: #721c24;
+            }
+            
+            .fade-out {
+                opacity: 0;
+                transition: opacity 0.4s ease-out;
+            }
         </style>
     </head>
     <body>
+        <div id="notification-container"></div>
         <header class="header-container">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
@@ -155,6 +234,82 @@
                         }
                     });
             };
+        </script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io();
+            var isLoggedIn;
+            var user;
+            var identify;
+
+            fetch("/auth/is-logged-in")
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        if (data.identify == "user") {
+                            socket.on('receiveMessage', (message) => {
+                                // Kiểm tra nếu tin nhắn là của người dùng này
+                                if (message.userID == data.user._id) {
+                                    showNotification(message,data);
+                                }
+                            });
+                        } else if (data.identify == "company") {
+                            socket.on('receiveMessage', (message) => {
+                                // Kiểm tra nếu tin nhắn là của công ty này
+                                if (message.companyID == data.company._id) {
+                                    showNotification(message,data);
+                                }
+                            });
+                        }
+                    } else {
+                        console.log("Không nhận được tin nhắn");
+                    }
+                });
+
+                    // Hàm hiển thị thông báo
+                    function showNotification(message, data) {
+                        console.log(message);
+                        const notificationContainer = document.getElementById('notification-container');
+                        
+                        // Tạo phần tử thông báo
+                        const notification = document.createElement('div');
+                        notification.classList.add('notification');
+                        
+                        // Thêm hiệu ứng hiển thị
+                        setTimeout(() => notification.classList.add('show'), 50);
+                        
+                        let avatar, name, content, alertType;
+                        
+                        // Cấu hình thông tin hiển thị theo loại người dùng
+                        if (data.identify === "user") {
+                            avatar = message.company.logoPath || 'https://via.placeholder.com/40'; // Avatar công ty (nếu có)
+                            name = message.company.companyName;
+                            alertType = 'alert-user';
+                        } else if (data.identify === "company") {
+                            avatar = message.user.avatarPath || 'https://via.placeholder.com/40'; // Avatar người dùng (nếu có)
+                            name = message.user.fullname;
+                            alertType = 'alert-company';
+                        }
+                        
+                        // Nội dung của thông báo
+                        notification.classList.add(alertType);
+                        notification.innerHTML = `
+                            <img src="${avatar}" alt="${name}" />
+                            <div class="content">
+                                <strong>${name}</strong>
+                                <span>${message.content}</span>
+                            </div>
+                        `;
+                    
+                        // Thêm thông báo vào container
+                        notificationContainer.appendChild(notification);
+                        
+                        // Tự động ẩn thông báo sau 3 giây
+                        setTimeout(() => {
+                            notification.classList.add('hide'); // Thêm hiệu ứng ẩn
+                            setTimeout(() => notification.remove(), 400); // Xóa phần tử sau hiệu ứng
+                        }, 5000);
+                    }
         </script>
     </body>
 </html>

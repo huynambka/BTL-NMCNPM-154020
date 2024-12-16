@@ -89,7 +89,7 @@
     <body>
         <div class="container mt-5">
             <h3 class="fw-bold mb-4"><i class="bi bi-stars"></i> Các Công Ty Phổ Biến</h3>
-            <div id="companyCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div id="companyCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
                 <div class="carousel-inner">
                     <% for (let i = 0; i < companies.length; i += 3) { %>
                     <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
@@ -113,7 +113,7 @@
                                     </div>
                                     <div class="company-card-body">
                                         <p>
-                                            <% if (company.description.length > 240) { %> <%=
+                                            <% if (company.description.length > 240 ) { %> <%=
                                             company.description.substring(0, 240) %> ... <% } else { %> <%=
                                             company.description %> <% } %>
                                         </p>
